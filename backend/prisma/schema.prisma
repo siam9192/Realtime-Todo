@@ -1,0 +1,138 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  profilePhoto String?
+  gender       Gender
+  email        String   @unique
+  password     String
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  
+  createdTasks   Task[] @relation("TaskCreator")
+  assignedTasks  Task[] @relation("TaskAssignee")
+
+  notifications  Notification[]
+
+  sessions       ActiveSession[]
+
+  taskAuditLogs  TaskStatusAuditLog[]
+
+  @@map("users")
+}
+
+model Task {
+  id            String   @id @default(cuid())
+  title         String @db.VarChar(100)
+  description   String
+  dueDate       DateTime
+  priority      Priority
+  status        Status
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+
+  // Relations
+  creatorId     String
+  creator       User     @relation("TaskCreator", fields: [creatorId], references: [id])
+
+  assignedToId  String?
+  assignedTo    User?    @relation("TaskAssignee", fields: [assignedToId], references: [id])
+
+  taskAuditLogs  TaskStatusAuditLog[]
+
+  @@map("tasks")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  message   String
+  type      NotificationType
+  category  NotificationCategory
+  visitId   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  @@map("notifications")
+}
+
+model ActiveSession {
+  id        String   @id @default(cuid())
+  userId    String
+  socketId  String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, socketId])
+  @@map("active_sessions")
+}
+
+
+model TaskStatusAuditLog {
+  id          String   @id @default(cuid())
+
+  taskId      String
+  oldStatus   Status
+  newStatus   Status
+
+  changedById String
+  changedBy   User     @relation(fields: [changedById], references: [id])
+
+  createdAt   DateTime @default(now())
+
+  task        Task     @relation(fields: [taskId], references: [id])
+
+  @@index([taskId])
+  @@index([changedById])
+  @@map("task_status_audit_logs")
+}
+
+
+/* -------------------- ENUMS -------------------- */
+
+enum Priority {
+  Low
+  Medium
+  High
+  Urgent
+}
+
+enum Status {
+  To_Do
+  In_Progress
+  Review
+  Completed
+}
+
+enum Gender {
+  Male
+  Female
+  Other
+}
+
+enum NotificationCategory {
+  Task
+  System
+  Message
+  Reminder
+}
+
+enum NotificationType {
+  Info
+  Success
+  Warning
+  Error
+}

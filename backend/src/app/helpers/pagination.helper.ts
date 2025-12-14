@@ -1,6 +1,7 @@
-import { PaginationOptions } from "../types";
-import { PAGINATION_OPTION_KEYS } from "../utils/constant";
-import { pick } from "../utils/helpers";
+import { PaginationOptions } from "../lib/types";
+import { PAGINATION_OPTION_KEYS } from "../lib/constant";
+import { pick } from "../lib/pick";
+
 
 export enum ESortOrder {
   ASC = "asc",
