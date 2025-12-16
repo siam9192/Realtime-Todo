@@ -11,7 +11,7 @@ import { UserAccountStatus } from '@prisma/client';
 
 function auth() {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.headers.authorization?.replace('Bearer ', '');
+    const token =  req.cookies?.accessToken?.replace('Bearer ', '');
 
     // checking if the token is missing
     if (!token) {
@@ -41,13 +41,9 @@ function auth() {
       throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
     }
 
-    // checking if the user is already deleted
-    // if (user.isDeleted) {
-    //   throw new AppError(httpStatus.FORBIDDEN, "This user is deleted ! !");
-    // }
+   
 
     // checking if the user is blocked
-
     if (user.status === UserAccountStatus.Blocked) {
       throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked ! !');
     }

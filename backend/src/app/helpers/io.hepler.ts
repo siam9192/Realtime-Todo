@@ -1,4 +1,8 @@
-import { getIO, getUserSocketIds, getUsersSocketIds } from '../socket/socketStore';
+import {
+  getIO,
+  getUserSocketIds,
+  getUsersSocketIds,
+} from '../socket/socketStore';
 
 const io = getIO();
 

@@ -1,6 +1,6 @@
 import { Server, Socket } from 'socket.io';
 import { Server as HttpServer } from 'http';
-import {addUserSocket, setIO } from './socketStore';
+import { addUserSocket, setIO } from './socketStore';
 import { registerSocketEvents } from './events';
 
 import socketAuth from '../middlewares/socketAuth';
@@ -27,9 +27,8 @@ export const initSocket = (httpServer: HttpServer) => {
     try {
       if (!authUser)
         throw new AppError(httpStatus.UNAUTHORIZED, 'Unauthorized');
-         
-       addUserSocket(authUser.id,socket.id)
-       
+
+      addUserSocket(authUser.id, socket.id);
     } catch (err) {
       console.error('⚠️ Error in connect-user:', err);
       socket.emit('error', {
@@ -37,9 +36,7 @@ export const initSocket = (httpServer: HttpServer) => {
       });
     }
 
-    console.log(
-      `🟢 Socket connected: ${socket.id}`,
-    );
+    console.log(`🟢 Socket connected: ${socket.id}`);
 
     // Register custom socket events
     registerSocketEvents(socket);

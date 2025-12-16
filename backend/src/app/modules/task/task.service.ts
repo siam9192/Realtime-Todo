@@ -24,13 +24,8 @@ class TaskService {
       creatorId: authUser.id,
     });
 
-    const affectedUserIds = [authUser.id, payload.assignedToId];
-
     return {
-    
       data: createdTask,
-
-      affectedUserIds,
     };
   }
 
@@ -39,8 +34,7 @@ class TaskService {
     taskId: string,
     payload: UpdateTaskPayload,
   ) {
-    const affectedUserIds = [authUser.id];
-    let  hasAssignedUserChanged = false
+    let hasAssignedUserChanged = false;
 
     // Fetch task
     const task = await taskRepository.findByIdWithOwnership(taskId);
@@ -56,11 +50,6 @@ class TaskService {
       );
     }
 
-    // Previously assigned user is affected
-    if (task.assignedToId) {
-      affectedUserIds.push(task.assignedToId);
-    }
-
     // Validate assigned user if changed
     const { assignedToId } = payload;
     if (assignedToId && assignedToId !== task.assignedToId) {
@@ -68,19 +57,17 @@ class TaskService {
       if (!assignedUserExists) {
         throw new AppError(httpStatus.NOT_FOUND, 'Assigned user not found');
       }
-      hasAssignedUserChanged = true
-      affectedUserIds.push(assignedToId);
+      hasAssignedUserChanged = true;
     }
-    
-    
 
     // Update task
     const updatedTask = await taskRepository.updateById(taskId, payload);
 
     return {
       data: updatedTask,
-      affectedUserIds,
-      ...(hasAssignedUserChanged ? {assigned:{from:task.assignedToId,to:payload.assignedToId}} : {})
+      ...(hasAssignedUserChanged
+        ? { assigned: { from: task.assignedToId, to: payload.assignedToId } }
+        : {}),
     };
   }
 
@@ -99,11 +86,10 @@ class TaskService {
     }
 
     // Delete task
-    const deletedTask =   await taskRepository.deleteById(taskId);
-  
+    const deletedTask = await taskRepository.deleteById(taskId);
+
     return {
       data: deletedTask,
-      affectedUserIds: [authUser.id, task.assignedToId],
     };
   }
 

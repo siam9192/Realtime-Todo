@@ -1,5 +1,3 @@
-// types/express.d.ts
-
 import { AuthUser } from './modules/auth/auth.interface';
 
 declare global {

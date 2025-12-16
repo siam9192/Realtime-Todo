@@ -9,10 +9,10 @@ class NotificationRepository {
     return await this.notification.create({ data });
   }
 
-  async createMany (data:Prisma.NotificationUncheckedCreateInput[]) {
-   return await this.notification.createMany({
-      data
-    })
+  async createMany(data: Prisma.NotificationUncheckedCreateInput[]) {
+    return await this.notification.createMany({
+      data,
+    });
   }
 
   async findUserNotifications(userId: string, paginationData: PaginationData) {

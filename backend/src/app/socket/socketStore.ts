@@ -3,11 +3,9 @@ import { ConnectedUser } from '../types';
 
 let io: Server | null = null;
 
-
 type UsersMap = Map<string, Set<string>>;
 
 const users: UsersMap = new Map();
-
 
 export function addUserSocket(userId: string, socketId: string) {
   if (!users.has(userId)) {
@@ -30,22 +28,17 @@ export function getUserSocketIds(userId: string): string[] {
   return Array.from(users.get(userId) ?? []);
 }
 export function getUsersSocketIds(userIds: string[]): string[] {
-  
   const uniqueUserIds = Array.from(new Set(userIds));
 
   const socketIds: string[] = [];
 
-  uniqueUserIds.forEach(userId => {
+  uniqueUserIds.forEach((userId) => {
     const ids = users.get(userId);
     if (ids) socketIds.push(...ids);
   });
 
-  
   return Array.from(new Set(socketIds));
 }
-
-
-
 
 export function isUserConnected(userId: string): boolean {
   return users.has(userId);
@@ -57,8 +50,6 @@ export function getAllConnectedUsers(): ConnectedUser[] {
     socketIds: Array.from(socketIds),
   }));
 }
-
-
 
 export const setIO = (ioInstance: Server) => {
   io = ioInstance;
