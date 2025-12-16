@@ -15,14 +15,14 @@ const moduleRoutes: TModuleRoutes = [
     path: '/users',
     router: userRouter,
   },
-   {
+  {
     path: '/tasks',
     router: taskRouter,
   },
   {
-    path:'/notifications',
-    router:notificationRouter
-  }
+    path: '/notifications',
+    router: notificationRouter,
+  },
 ];
 
 const routes = moduleRoutes.map((route) =>

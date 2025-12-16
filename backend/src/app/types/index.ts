@@ -29,3 +29,17 @@ export interface PaginationData {
 export interface FilterQuery {
   [key: string]: string | number;
 }
+
+export interface ConnectedUser {
+  userId: string;
+  socketIds: string[];
+}
+
+export enum TaskEvent {
+  CREATED = 'task:created',
+  UPDATED = 'task:updated',
+  ASSIGNED = 'task:assigned',
+  UNASSIGNED = 'task:unassigned',
+  COMPLETED = 'task:completed',
+  DELETED = 'task:deleted',
+}

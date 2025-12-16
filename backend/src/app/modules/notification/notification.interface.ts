@@ -1,8 +1,18 @@
-import { NotificationCategory, NotificationType } from "@prisma/client"
+import { NotificationCategory, NotificationType } from '@prisma/client';
 
 export interface CreateNotificationPayload {
-    userId:string
-    message:string,
-    type:NotificationType,
-    category:NotificationCategory
+  userId: string;
+  title: string;
+  message: string;
+  category: NotificationCategory;
+  type: NotificationType;
+  entityId?: string;
+}
+
+export interface instantNotifyPayload {
+  title: string;
+  message: string;
+  category: NotificationCategory;
+  type: NotificationType;
+  entityId?: string;
 }

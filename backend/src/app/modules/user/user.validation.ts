@@ -38,7 +38,7 @@ export const updateUserProfileSchema = z.object({
 
 const userValidations = {
   createUserSchema,
-  updateUserProfileSchema
+  updateUserProfileSchema,
 };
 
 export default userValidations;

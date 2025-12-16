@@ -1,12 +1,20 @@
 import { Socket } from 'socket.io';
+import activeSessionService from '../modules/active-session/active-session.service';
+import { AuthUser } from '../types';
+import { removeUserSocket } from './socketStore';
+
 
 export const registerSocketEvents = (socket: Socket) => {
-  socket.on('join-room', (roomId: string) => {
-    socket.join(roomId);
-    console.log(`User joined room: ${roomId}`);
+  const authUser = socket.data.user as AuthUser;
+
+  
+  // Handle disconnect
+  socket.on('disconnect', async (reason) => {
+    console.log(`🔴 Socket disconnected: ${socket.id}, reason: ${reason}`);
+    if (authUser) {
+     removeUserSocket(authUser.id,socket.id)
+    }
   });
 
-  socket.on('send-message', (data) => {
-    socket.to(data.roomId).emit('receive-message', data);
-  });
+  
 };

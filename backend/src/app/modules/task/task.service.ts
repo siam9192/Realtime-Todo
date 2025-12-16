@@ -2,6 +2,7 @@ import { calculatePagination } from '../../helpers/pagination.helper';
 import AppError from '../../lib/AppError';
 import httpStatus from '../../lib/http-status';
 import { AuthUser, PaginationOptions } from '../../types';
+import userRepository from '../user/user.repository';
 import {
   CreateTaskPayload,
   TaskFilterQuery,
@@ -12,16 +13,25 @@ import taskRepository from './task.repository';
 class TaskService {
   async createTask(authUser: AuthUser, payload: CreateTaskPayload) {
     // Check assigned user existence
-    const assignedUser = await taskRepository.findById(authUser.id);
-    if (!assignedUser) {
+    const assignedUserExist = await userRepository.isExistById(authUser.id);
+    if (!assignedUserExist) {
       throw new AppError(httpStatus.NOT_FOUND, 'Assigned to user not found');
     }
 
     // Create task
-    return taskRepository.create({
+    const createdTask = await taskRepository.create({
       ...payload,
       creatorId: authUser.id,
     });
+
+    const affectedUserIds = [authUser.id, payload.assignedToId];
+
+    return {
+    
+      data: createdTask,
+
+      affectedUserIds,
+    };
   }
 
   async updateTask(
@@ -29,6 +39,9 @@ class TaskService {
     taskId: string,
     payload: UpdateTaskPayload,
   ) {
+    const affectedUserIds = [authUser.id];
+    let  hasAssignedUserChanged = false
+
     // Fetch task
     const task = await taskRepository.findByIdWithOwnership(taskId);
     if (!task) {
@@ -43,21 +56,36 @@ class TaskService {
       );
     }
 
+    // Previously assigned user is affected
+    if (task.assignedToId) {
+      affectedUserIds.push(task.assignedToId);
+    }
+
     // Validate assigned user if changed
     const { assignedToId } = payload;
     if (assignedToId && assignedToId !== task.assignedToId) {
-      const assignedUserExists = await taskRepository.findById(assignedToId);
+      const assignedUserExists = await userRepository.isExistById(assignedToId);
       if (!assignedUserExists) {
         throw new AppError(httpStatus.NOT_FOUND, 'Assigned user not found');
       }
+      hasAssignedUserChanged = true
+      affectedUserIds.push(assignedToId);
     }
+    
+    
 
     // Update task
-    return taskRepository.updateById(taskId, payload);
+    const updatedTask = await taskRepository.updateById(taskId, payload);
+
+    return {
+      data: updatedTask,
+      affectedUserIds,
+      ...(hasAssignedUserChanged ? {assigned:{from:task.assignedToId,to:payload.assignedToId}} : {})
+    };
   }
 
   async deleteTask(authUser: AuthUser, taskId: string) {
-    const task = await taskRepository.findByIdWithOwnership(taskId);
+    const task = await taskRepository.findById(taskId);
     if (!task) {
       throw new AppError(httpStatus.NOT_FOUND, 'Task not found');
     }
@@ -71,9 +99,12 @@ class TaskService {
     }
 
     // Delete task
-    await taskRepository.deleteById(taskId);
-
-    return { success: true };
+    const deletedTask =   await taskRepository.deleteById(taskId);
+  
+    return {
+      data: deletedTask,
+      affectedUserIds: [authUser.id, task.assignedToId],
+    };
   }
 
   async getAssignedTasks(

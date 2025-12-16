@@ -41,27 +41,30 @@ class TaskRepository {
       ...(andConditions.length ? { AND: andConditions } : {}),
     };
   }
-  
-  private task =  prisma.task
- 
 
- async isTaskExist (id:string) {
+  private task = prisma.task;
+
+  async isTaskExist(id: string) {
     const user = await this.task.findUnique({
-        where:{
-            id
-        },
-        select:null
-    })
-    return !!user
- }
+      where: {
+        id,
+      },
+      select: null,
+    });
+    return !!user;
+  }
 
   async create(data: Prisma.TaskUncheckedCreateInput) {
     return this.task.create({ data });
   }
 
-   async findById(taskId: string) {
+  async findById(
+    taskId: string,
+    options: { include?: Prisma.UserInclude; select?: Prisma.UserSelect } = {},
+  ) {
     return prisma.task.findUnique({
       where: { id: taskId },
+      ...options,
     });
   }
 
@@ -75,7 +78,6 @@ class TaskRepository {
       },
     });
   }
-
 
   async updateById(taskId: string, data: Prisma.TaskUncheckedUpdateInput) {
     return this.task.update({

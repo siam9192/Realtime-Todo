@@ -1,13 +1,11 @@
-import { Router } from "express";
-import auth from "../../middlewares/auth";
-import notificationController from "./notification.controller";
+import { Router } from 'express';
+import auth from '../../middlewares/auth';
+import notificationController from './notification.controller';
 
-const router = Router()
+const router = Router();
 
-router.post("/",auth(),notificationController.getNotifications)
+router.post('/', auth(), notificationController.getNotifications);
 
+const notificationRouter = router;
 
-const notificationRouter = router
-
-export default notificationRouter
-
+export default notificationRouter;

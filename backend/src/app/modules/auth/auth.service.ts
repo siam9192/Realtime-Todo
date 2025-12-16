@@ -89,12 +89,12 @@ class AuthService {
     }
     // Hash the new password
     const newEncryptedPassword = bcryptHelper.hash(payload.newPassword);
-  
+
     // Update user password and passwordLastChangedAt
-    await userRepository.updateById(authUser.id ,{
-        password: newEncryptedPassword,
-        passwordLastChangedAt: new Date()
-      })
+    await userRepository.updateById(authUser.id, {
+      password: newEncryptedPassword,
+      passwordLastChangedAt: new Date(),
+    });
 
     const tokenPayload = {
       id: user.id,
@@ -170,7 +170,6 @@ class AuthService {
       );
     }
   }
-  
 }
 
 export default new AuthService();

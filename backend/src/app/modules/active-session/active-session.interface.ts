@@ -1,4 +1,4 @@
 export interface CreateActiveSessionPayload {
-    userId:string
-    socketId:string
+  userId: string;
+  socketId: string;
 }
