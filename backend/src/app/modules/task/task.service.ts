@@ -2,6 +2,7 @@ import { calculatePagination } from '../../helpers/pagination.helper';
 import AppError from '../../lib/AppError';
 import httpStatus from '../../lib/http-status';
 import { AuthUser, PaginationOptions } from '../../types';
+import taskStatusAuditLogService from '../taskStatusAuditLog/taskStatusAuditLog.service';
 import userRepository from '../user/user.repository';
 import {
   CreateTaskPayload,
@@ -37,7 +38,7 @@ class TaskService {
     let hasAssignedUserChanged = false;
 
     // Fetch task
-    const task = await taskRepository.findByIdWithOwnership(taskId);
+    const task = await taskRepository.findById(taskId);
     if (!task) {
       throw new AppError(httpStatus.NOT_FOUND, 'Task not found');
     }
@@ -62,6 +63,18 @@ class TaskService {
 
     // Update task
     const updatedTask = await taskRepository.updateById(taskId, payload);
+
+    const hasStatusChanged = task.status !== updatedTask.status;
+
+    // If status has changed, asynchronously create an audit log
+    if (hasStatusChanged) {
+      taskStatusAuditLogService.createLog({
+        taskId: updatedTask.id,
+        oldStatus: task.status,
+        newStatus: updatedTask.status,
+        changedById: authUser.id,
+      });
+    }
 
     return {
       data: updatedTask,

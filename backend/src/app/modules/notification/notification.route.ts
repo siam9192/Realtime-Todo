@@ -6,7 +6,11 @@ const router = Router();
 
 router.post('/', auth(), notificationController.getNotifications);
 
-router.patch('/mark-read', auth(), notificationController.markUsersNotificationsAsRead);
+router.patch(
+  '/mark-read',
+  auth(),
+  notificationController.markUsersNotificationsAsRead,
+);
 
 const notificationRouter = router;
 

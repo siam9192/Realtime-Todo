@@ -1,5 +1,4 @@
 import { Socket } from 'socket.io';
-import activeSessionService from '../modules/active-session/active-session.service';
 import { AuthUser } from '../types';
 import { removeUserSocket } from './socketStore';
 
