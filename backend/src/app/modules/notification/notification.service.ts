@@ -10,7 +10,6 @@ import notificationRepository from './notification.repository';
 import { calculatePagination } from '../../helpers/pagination.helper';
 import {
   getIO,
-  getUserSocketIds,
   getUsersSocketIds,
 } from '../../socket/socketStore';
 

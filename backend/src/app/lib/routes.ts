@@ -3,6 +3,7 @@ import userRouter from '../modules/user/user.route';
 import authRouter from '../modules/auth/auth.router';
 import taskRouter from '../modules/task/task.route';
 import notificationRouter from '../modules/notification/notification.route';
+import metadataRouter from '../modules/metadata/metadata.router';
 
 type TModuleRoutes = { path: string; router: IRouter }[];
 const router = Router();
@@ -22,6 +23,10 @@ const moduleRoutes: TModuleRoutes = [
   {
     path: '/notifications',
     router: notificationRouter,
+  },
+  {
+    path: '/metadata',
+    router: metadataRouter,
   },
 ];
 
