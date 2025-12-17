@@ -9,7 +9,6 @@ const router = Router();
 router.get(
   '/me',
   auth(),
-  validateRequest(userValidations.createUserSchema),
   userController.getCurrentUser,
 );
 

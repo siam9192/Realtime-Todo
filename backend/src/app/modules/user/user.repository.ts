@@ -103,7 +103,7 @@ class UserRepository {
   ) {
     return this.user.findUnique({
       where: { id },
-      ...options,
+      ...options
     });
   }
 

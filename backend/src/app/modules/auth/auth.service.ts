@@ -1,4 +1,4 @@
-import z, { email } from 'zod';
+import z from 'zod';
 import envConfig from '../../config/env.config';
 import jwtHelper from '../../helpers/jwt.helper';
 import { prisma } from '../../prisma';
@@ -16,6 +16,7 @@ import userRepository from '../user/user.repository';
 
 class AuthService {
   async register(payload: UserRegistrationPayload) {
+    
     const user = await userService.createUser(payload);
     return user;
   }

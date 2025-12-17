@@ -6,11 +6,12 @@ import jwtHelper from '../helpers/jwt.helper';
 import envConfig from '../config/env.config';
 import { AuthUser } from '../types';
 import { JwtPayload } from 'jsonwebtoken';
-import { prisma } from '../prisma';
 import { UserAccountStatus } from '@prisma/client';
+import userRepository from '../modules/user/user.repository';
 
 function auth() {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  
     const token = req.cookies?.accessToken?.replace('Bearer ', '');
 
     // checking if the token is missing
@@ -31,11 +32,7 @@ function auth() {
     }
 
     // checking if the user is exist
-    const user = await prisma.user.findUnique({
-      where: {
-        id: decoded.user_id,
-      },
-    });
+    const user = await userRepository.findById(decoded.id,{select:{id:true,status:true}});
 
     if (!user) {
       throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');

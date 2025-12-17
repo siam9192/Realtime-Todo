@@ -7,7 +7,7 @@ import parse from 'parse-duration';
 
 class AuthController {
   register = catchAsync(async (req, res) => {
-    const result = await authService.register(req.user);
+    const result = await authService.register(req.body);
     sendSuccessResponse(res, {
       message: 'Registration successful',
       statusCode: httpStatus.CREATED,
@@ -16,7 +16,7 @@ class AuthController {
   });
 
   login = catchAsync(async (req, res) => {
-    const result = await authService.login(req.user);
+    const result = await authService.login(req.body);
     res.cookie('accessToken', result.accessToken, {
       httpOnly: true,
       secure: envConfig.environment?.toLocaleLowerCase() === 'production',

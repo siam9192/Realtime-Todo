@@ -14,6 +14,7 @@ import userRepository from './user.repository';
 
 class UserService {
   async createUser(payload: CreateUserPayload) {
+   
     const userExistByEmail = await userRepository.isExistByEmail(payload.email);
 
     if (userExistByEmail)
@@ -54,6 +55,7 @@ class UserService {
   }
 
   async getCurrentUserFromDB(authUser: AuthUser) {
+    
     const user = await userRepository.findById(authUser.id, {
       select: {
         id: true,
