@@ -165,7 +165,7 @@ function UpdateTaskModal({ task }: Props) {
                     <div className="avatar">
                       <div className="w-10 rounded-full bg-base-300">
                         <img
-                          src={assignUser.profilePicture ?? DEFAULT_PROFILE_PHOTO}
+                          src={assignUser.profilePhoto ?? DEFAULT_PROFILE_PHOTO}
                           alt={assignUser.name}
                         />
                       </div>

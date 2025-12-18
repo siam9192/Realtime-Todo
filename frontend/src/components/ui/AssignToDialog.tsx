@@ -79,7 +79,7 @@ function AssignToDialog({ onAssign, onClose }: Props) {
                 }`}
               >
                 <img
-                  src={user.profilePicture ?? DEFAULT_PROFILE_PHOTO}
+                  src={user.profilePhoto ?? DEFAULT_PROFILE_PHOTO}
                   className="w-10 h-10 rounded-full"
                 />
                 <div className="flex-1">

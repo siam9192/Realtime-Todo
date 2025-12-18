@@ -1,9 +1,12 @@
+import type z from "zod";
+import type userValidation from "../validations/user.validation";
+
 export interface User {
   id: string;
   name: string;
   email: string;
   username: string;
-  profilePicture?: string;
+  profilePhoto?: string;
   gender: Gender;
   createdAt: string;
   updated: string;
@@ -23,5 +26,7 @@ export type AssignUser = {
   name: string;
   username: string;
   email: string;
-  profilePicture: string;
+  profilePhoto: string;
 };
+
+export type UpdateUserProfilePayload = z.infer<typeof userValidation.updateUserProfileSchema>;

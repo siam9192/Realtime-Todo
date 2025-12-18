@@ -36,7 +36,7 @@ function TaskCard({ task }: { task: Task }) {
             <p className="text-xs opacity-60 mb-1">Assigned To:</p>
             <div className="flex items-center gap-2">
               <img
-                src={task.assignedTo.profilePicture ?? DEFAULT_PROFILE_PHOTO}
+                src={task.assignedTo.profilePhoto ?? DEFAULT_PROFILE_PHOTO}
                 alt={task.assignedTo.name}
                 className="w-7 h-7 rounded-full ring-2 ring-base-200"
               />
@@ -69,7 +69,7 @@ function TaskCard({ task }: { task: Task }) {
         <span>
           Created by{" "}
           <span className="font-medium text-base-content">
-            {task.creatorId === currentUser.id ? "You" : task.creator.name}
+            {task.creatorId === currentUser.id ? "You" :`@${task.creator.username}`}
           </span>
         </span>
 

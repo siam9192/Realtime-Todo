@@ -1,3 +1,4 @@
+import NotificationBar from "../ui/NotificationBar";
 import SidebarModal from "../ui/SidebarModal";
 import ThemeSwitchButton from "../ui/ThemeSwitchButton";
 import { MessageCircle } from "lucide-react";
@@ -15,7 +16,9 @@ function Header() {
 
         {/* Right: Theme Switch */}
         <div className="flex items-center gap-4">
+          <NotificationBar/>
           <ThemeSwitchButton />
+    
         </div>
       </div>
     </header>

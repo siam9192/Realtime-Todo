@@ -1,54 +1,53 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
+import type { UpdateUserProfilePayload } from "../../types/user.type";
+import { USER_PROPERTY_LENGTH } from "../../utils/constant";
+import { useCurrentUserProviderContext } from "../../context/CurrentUserProviderContext";
+import { toast } from "sonner";
+import { useUpdateUserProfileMutation } from "../../query/services/user.service";
+import userValidation from "../../validations/user.validation";
 
-export const USER_PROPERTY_LENGTH = {
-  name: { min: 3, max: 30 },
-  username: { min: 3, max: 20 },
-};
-
-interface EditProfileFormValues {
-  name: string;
-  email: string;
-  username: string;
-  gender: string;
-  profilePicture: string;
-}
-
-const demoUser: EditProfileFormValues = {
-  name: "Siam Hasan",
-  email: "siam@example.com",
-  username: "siamTy",
-  gender: "Male",
-  profilePicture: "https://i.pravatar.cc/150?img=12",
-};
+type EditProfileFormValues = UpdateUserProfilePayload;
 
 const EditProfilePage: React.FC = () => {
+  const { data, refetch } = useCurrentUserProviderContext();
+  const user = data!.data;
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm<EditProfileFormValues>({
-    defaultValues: demoUser,
+    defaultValues: {
+      name: user.name,
+      gender: user.gender,
+      profilePhoto: user.profilePhoto,
+    },
   });
 
-  const [preview, setPreview] = useState<string>(demoUser.profilePicture);
-  const profilePictureValue = watch("profilePicture");
+  const profilePhotoValue = watch("profilePhoto");
 
-  useEffect(() => {
-    if (profilePictureValue) setPreview(profilePictureValue);
-  }, [profilePictureValue]);
-
-  const onSubmit = (data: EditProfileFormValues) => {
-    console.log("Form submitted:", data);
-    alert("Profile updated successfully!");
+  const { mutate, isPending } = useUpdateUserProfileMutation();
+  const handleFormSubmit = (data: UpdateUserProfilePayload) => {
+    mutate(
+      userValidation.updateUserProfileSchema.safeParse(data).data as UpdateUserProfilePayload,
+      {
+        onSuccess: () => {
+          toast.success("Profile updated successfully");
+          refetch();
+        },
+        onError: (err) => {
+          toast.error(err.message);
+        },
+      },
+    );
   };
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-base-100 rounded-xl shadow-md">
       <h2 className="text-2xl font-bold mb-6">Edit Profile</h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
         {/* Name */}
         <div>
           <label className="label font-medium">Full Name</label>
@@ -69,23 +68,6 @@ const EditProfilePage: React.FC = () => {
           {errors.name && <p className="text-error text-sm mt-1">{errors.name.message}</p>}
         </div>
 
-        {/* Email */}
-        <div>
-          <label className="label font-medium">Email</label>
-          <input
-            type="email"
-            className="input input-bordered w-full"
-            {...register("email", { required: "Email is required" })}
-          />
-          {errors.email && <p className="text-error text-sm mt-1">{errors.email.message}</p>}
-        </div>
-
-        {/* Username */}
-        <div>
-          <label className="label font-medium">Username</label>
-          <input className="input input-bordered w-full" {...register("username")} />
-        </div>
-
         {/* Gender */}
         <div>
           <label className="label font-medium">Gender</label>
@@ -99,25 +81,30 @@ const EditProfilePage: React.FC = () => {
 
         {/* Profile Picture */}
         <div>
-          <label className="label font-medium">Profile Picture URL</label>
+          <label className="label font-medium">Profile Photo URL</label>
           <input
             type="text"
             className="input input-bordered w-full"
-            {...register("profilePicture")}
+            {...register("profilePhoto")}
           />
-          <div className="mt-2">
-            <p className="text-sm opacity-70 mb-1">Preview:</p>
-            <img
-              src={preview}
-              alt="Profile Preview"
-              className="w-24 h-24 rounded-full object-cover border border-base-300"
-            />
-          </div>
+          {errors.profilePhoto && (
+            <p className="text-error text-sm mt-1">{errors.profilePhoto.message}</p>
+          )}
+          {profilePhotoValue ? (
+            <div className="mt-2">
+              <p className="text-sm opacity-70 mb-1">Preview:</p>
+              <img
+                src={profilePhotoValue}
+                alt="Profile Preview"
+                className="w-24 h-24 rounded-full object-cover border border-base-300"
+              />
+            </div>
+          ) : null}
         </div>
 
         {/* Submit */}
         <div className="mt-4">
-          <button type="submit" className="btn btn-primary w-full">
+          <button disabled={isPending} type="submit" className="btn btn-primary w-full">
             Save Changes
           </button>
         </div>

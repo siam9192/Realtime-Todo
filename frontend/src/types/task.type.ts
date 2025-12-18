@@ -20,7 +20,7 @@ export type TaskUser = {
   id: string;
   name: string;
   username: string;
-  profilePicture: string;
+  profilePhoto: string;
 };
 export enum TaskStatus {
   To_Do = "To_Do",

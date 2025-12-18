@@ -61,7 +61,7 @@ function CreateTaskModal() {
     <>
       {/* Open Button */}
       <button
-        className="btn btn-primary btn-sm"
+        className="btn btn-primary btn-md md:btn-lg"
         onClick={() =>
           (document.getElementById("create-task-modal") as HTMLDialogElement)?.showModal()
         }
@@ -180,7 +180,7 @@ function CreateTaskModal() {
                     <div className="avatar">
                       <div className="w-10 rounded-full bg-base-300">
                         <img
-                          src={assignUser.profilePicture ?? DEFAULT_PROFILE_PHOTO}
+                          src={assignUser.profilePhoto ?? DEFAULT_PROFILE_PHOTO}
                           alt={assignUser.name}
                         />
                       </div>

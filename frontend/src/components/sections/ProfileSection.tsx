@@ -11,7 +11,7 @@ function ProfileSection() {
       <div className="flex md:flex-row flex-col items-center gap-6">
         {/* Avatar */}
         <img
-          src={user.profilePicture ?? DEFAULT_PROFILE_PHOTO}
+          src={user.profilePhoto ?? DEFAULT_PROFILE_PHOTO}
           alt="avatar"
           className="w-24 h-24 rounded-full object-cover border-2 border-primary"
         />
