@@ -1,7 +1,4 @@
-import {
-  getIO,
-  getUsersSocketIds,
-} from '../socket/socketStore';
+import { getIO, getUsersSocketIds } from '../socket/socketStore';
 
 export function emitToUsers(userIds: string[], event: string, data: any) {
   const io = getIO();

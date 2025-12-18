@@ -1,8 +1,8 @@
 import { AuthUser } from '../../types';
-import metadataRepository from './metaData.repository';
+import metaDataRepository from './metadata.repository';
 
 class MetadataService {
-  private repo = metadataRepository;
+  private repo = metaDataRepository;
 
   async getUserGlobalMetadata(authUser: AuthUser) {
     const [totalCreatedTasks, totalAssignedTasks, totalOverdueTasks] =
@@ -19,15 +19,15 @@ class MetadataService {
     };
   }
 
-  async getUserNotificationsMetadata(userId: string) {
+  async getUserNotificationsMetadata(authUser: AuthUser) {
     const [unreadCount, totalNotifications] = await Promise.all([
-      this.repo.countUserUnreadNotifications(userId),
-      this.repo.countUserNotifications(userId),
+      this.repo.countUserUnreadNotifications(authUser.id),
+      this.repo.countUserNotifications(authUser.id),
     ]);
 
     return {
-      unreadCount,
-      totalNotifications,
+      totalUnread: unreadCount,
+      total: totalNotifications,
     };
   }
 }

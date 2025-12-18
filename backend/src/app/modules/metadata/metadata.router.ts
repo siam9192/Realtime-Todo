@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import auth from '../../middlewares/auth';
-import metaDataController from './metaData.controller';
+import metaDataController from './metadata.controller';
 
 const router = Router();
 
-router.get('/', auth(), metaDataController.getUserGlobalMetadata);
+router.get('/global', auth(), metaDataController.getUserGlobalMetadata);
 
 router.get(
   '/notifications',

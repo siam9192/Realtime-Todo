@@ -4,7 +4,8 @@ import notificationController from './notification.controller';
 
 const router = Router();
 
-router.post('/', auth(), notificationController.getNotifications);
+
+router.get('/', auth(), notificationController.getNotifications);
 
 router.patch(
   '/mark-read',

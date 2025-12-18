@@ -16,7 +16,6 @@ import userRepository from '../user/user.repository';
 
 class AuthService {
   async register(payload: UserRegistrationPayload) {
-    
     const user = await userService.createUser(payload);
     return user;
   }

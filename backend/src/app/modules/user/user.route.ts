@@ -6,14 +6,11 @@ import userValidations from './user.validation';
 
 const router = Router();
 
-router.get(
-  '/me',
-  auth(),
-  userController.getCurrentUser,
-);
+router.get('/me', auth(), userController.getCurrentUser);
 
+router.get('/visible', auth(), userController.getVisibleUsers);
 router.put(
-  '/',
+  '/me',
   auth(),
   validateRequest(userValidations.updateUserProfileSchema),
   userController.updateUserProfile,

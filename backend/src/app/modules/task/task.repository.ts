@@ -55,7 +55,7 @@ class TaskRepository {
   }
 
   async create(data: Prisma.TaskUncheckedCreateInput) {
-    return this.task.create({ data });
+    return await this.task.create({ data });
   }
 
   async findById(
@@ -80,14 +80,14 @@ class TaskRepository {
   }
 
   async updateById(taskId: string, data: Prisma.TaskUncheckedUpdateInput) {
-    return this.task.update({
+    return await this.task.update({
       where: { id: taskId },
       data,
     });
   }
 
   async deleteById(taskId: string) {
-    return this.task.delete({
+    return await this.task.delete({
       where: { id: taskId },
     });
   }

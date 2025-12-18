@@ -32,7 +32,7 @@ class UserController {
     sendSuccessResponse(res, {
       message: 'Visible users retrieved successfully',
       statusCode: httpStatus.OK,
-      data: result,
+      ...result,
     });
   });
 }

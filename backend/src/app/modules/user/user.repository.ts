@@ -10,6 +10,7 @@ class UserRepository {
     profilePhoto: true,
     gender: true,
     email: true,
+    username: true,
     createdAt: true,
     updatedAt: true,
   };
@@ -103,7 +104,7 @@ class UserRepository {
   ) {
     return this.user.findUnique({
       where: { id },
-      ...options
+      ...options,
     });
   }
 
@@ -131,7 +132,7 @@ class UserRepository {
       select: this.userDefaultSelect,
     });
 
-    const totalResults = this.user.count();
+    const totalResults = await this.user.count();
 
     const meta = {
       page,

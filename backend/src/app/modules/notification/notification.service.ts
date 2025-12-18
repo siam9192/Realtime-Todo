@@ -36,6 +36,7 @@ class NotificationService {
   }
 
   async instantNotifyToUsers(userIds: string[], payload: instantNotifyPayload) {
+   console.log(payload)
     await notificationRepository.createMany(
       userIds.map((id) => ({ ...payload, userId: id })),
     );

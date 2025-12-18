@@ -28,12 +28,12 @@ export const updateUserProfileSchema = z.object({
     .max(50, 'Name must be at most 50 characters')
     .optional(),
 
-  profilePicture: z
+  profilePhoto: z
     .string()
-    .url('Profile picture must be a valid URL')
+    .url('Profile picture must be a valid URL').nullable()
     .optional(),
 
-  gender: z.nativeEnum(Gender).optional(),
+  gender: z.nativeEnum(Gender).nullable().optional(),
 });
 
 const userValidations = {

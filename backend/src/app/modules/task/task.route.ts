@@ -25,6 +25,8 @@ router.get('/created', auth(), taskController.getCreatedTasks);
 
 router.get('/assigned', auth(), taskController.getAssignedTasks);
 
+router.get('/overdue', auth(), taskController.getOverdueTasks);
+
 const taskRouter = router;
 
 export default taskRouter;

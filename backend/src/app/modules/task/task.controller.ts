@@ -136,7 +136,7 @@ class TaskController {
     sendSuccessResponse(res, {
       message: 'Task deleted  successfully',
       statusCode: httpStatus.OK,
-      data: null,
+      data:null,
     });
   });
 
@@ -149,7 +149,7 @@ class TaskController {
     sendSuccessResponse(res, {
       message: 'Assigned tasks retrieved   successfully',
       statusCode: httpStatus.OK,
-      data: result,
+    ...result,
     });
   });
 
@@ -162,7 +162,7 @@ class TaskController {
     sendSuccessResponse(res, {
       message: 'Created tasks retrieved   successfully',
       statusCode: httpStatus.OK,
-      data: result,
+     ...result,
     });
   });
 
@@ -175,7 +175,7 @@ class TaskController {
     sendSuccessResponse(res, {
       message: 'Overdue tasks retrieved   successfully',
       statusCode: httpStatus.OK,
-      data: result,
+    ...result,
     });
   });
 }

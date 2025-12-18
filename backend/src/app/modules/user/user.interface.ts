@@ -9,7 +9,7 @@ export interface CreateUserPayload {
 
 export type UpdateUserProfilePayload = Partial<{
   name: string;
-  profilePicture: string;
+  profilePhoto: string;
   gender: Gender;
 }>;
 

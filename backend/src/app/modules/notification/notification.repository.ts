@@ -11,7 +11,7 @@ class NotificationRepository {
 
   async createMany(data: Prisma.NotificationUncheckedCreateInput[]) {
     return await this.notification.createMany({
-      data,
+      data
     });
   }
 

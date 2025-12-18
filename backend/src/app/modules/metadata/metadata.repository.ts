@@ -30,14 +30,14 @@ class MetadataRepository {
   }
 
   async countUserUnreadNotifications(userId: string) {
-    return prisma.notification.count({
+    return  prisma.notification.count({
       where: { userId, isRead: false },
     });
   }
 
   // Count total notifications for a user
   async countUserNotifications(userId: string) {
-    return prisma.notification.count({
+    return  prisma.notification.count({
       where: { userId },
     });
   }

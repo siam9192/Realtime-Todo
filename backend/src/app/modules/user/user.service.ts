@@ -2,7 +2,6 @@ import bcryptHelper from '../../helpers/bycrypt.helper';
 import AppError from '../../lib/AppError';
 import httpStatus from '../../lib/http-status';
 import { AuthUser, PaginationOptions } from '../../types';
-import { prisma } from '../../prisma';
 import {
   CreateUserPayload,
   UpdateUserProfilePayload,
@@ -14,7 +13,6 @@ import userRepository from './user.repository';
 
 class UserService {
   async createUser(payload: CreateUserPayload) {
-   
     const userExistByEmail = await userRepository.isExistByEmail(payload.email);
 
     if (userExistByEmail)
@@ -55,11 +53,11 @@ class UserService {
   }
 
   async getCurrentUserFromDB(authUser: AuthUser) {
-    
     const user = await userRepository.findById(authUser.id, {
       select: {
         id: true,
         name: true,
+        username: true,
         profilePhoto: true,
         gender: true,
         status: true,
