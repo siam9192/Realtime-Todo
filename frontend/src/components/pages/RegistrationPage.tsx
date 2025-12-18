@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import authValidation, { type UserRegisterFormValues } from "../../validations/auth.validation";
 import { userUserRegistrationMutation } from "../../query/services/auth.service";
 import { toast } from "sonner";
-import { useEffect } from "react";
 
 function RegistrationPage() {
   const {
@@ -14,11 +13,7 @@ function RegistrationPage() {
   } = useForm<UserRegisterFormValues>({
     resolver: zodResolver(authValidation.userRegistrationSchema),
   });
-  useEffect(() => {
-    setInterval(() => {
-      toast.success("Hello world");
-    }, 2000);
-  }, []);
+
   const { mutate, isPending } = userUserRegistrationMutation();
   const onSubmit = async (data: UserRegisterFormValues) => {
     mutate(data, {

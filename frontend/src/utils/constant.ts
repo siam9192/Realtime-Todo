@@ -20,5 +20,4 @@ export const USER_PROPERTY_LENGTH = {
   },
 };
 
-
-export const DEFAULT_PROFILE_PHOTO =  "https://openclipart.org/image/800px/346569"
+export const DEFAULT_PROFILE_PHOTO = "https://openclipart.org/image/800px/346569";

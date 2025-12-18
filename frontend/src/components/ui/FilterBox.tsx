@@ -17,7 +17,7 @@ interface Props {
 
 function FilterBox({ onChange }: Props) {
   const [sortBy, setSortBy] = useState(sortOptions[0].value);
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [filterValues, setFilterValues] = useState<TaskFilterValues>({});
 
   useEffect(() => {
@@ -27,7 +27,7 @@ function FilterBox({ onChange }: Props) {
         sortOrder,
         ...filterValues,
       });
-  }, [sortBy, sortOrder, filterValues, onChange]);
+  }, [sortBy, sortOrder, filterValues]);
 
   return (
     <div className="flex flex-col sm:flex-row justify-end items-center gap-4 mb-4">

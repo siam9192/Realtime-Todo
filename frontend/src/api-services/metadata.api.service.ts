@@ -19,7 +19,9 @@ export async function getUserGlobalMetadata(): Promise<IResponse<UserGlobalMetad
   }
 }
 
-export async function getUserNotificationsMetadata(): Promise<IResponse<UserNotificationsMetadata>> {
+export async function getUserNotificationsMetadata(): Promise<
+  IResponse<UserNotificationsMetadata>
+> {
   try {
     const res = await axiosInstance.get("/metadata/notifications");
 

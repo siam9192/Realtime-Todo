@@ -1,3 +1,6 @@
+import type z from "zod";
+import type taskValidation from "../validations/task.validation";
+
 export interface Task {
   id: string;
   title: string;
@@ -32,3 +35,7 @@ export enum TaskPriority {
   High = "High",
   Urgent = "Urgent",
 }
+
+export type CreateTaskPayload = z.infer<typeof taskValidation.createTaskSchema>;
+
+export type UpdateTaskPayload = z.infer<typeof taskValidation.updateTaskSchema>;

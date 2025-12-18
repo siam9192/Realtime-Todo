@@ -1,55 +1,30 @@
 import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
-
-export type AssignUser = {
-  id: string;
-  name: string;
-  username: string;
-  email: string;
-  profilePicture: string;
-};
+import { userGetVisibleUsersQuery } from "../../query/services/user.service";
+import { DEFAULT_PROFILE_PHOTO } from "../../utils/constant";
+import type { AssignUser } from "../../types/user.type";
 
 interface Props {
-  onAssign: (id: string) => void;
+  onAssign: (user: AssignUser) => void;
   onClose: () => void;
 }
 
-const mockUsers: AssignUser[] = [
-  {
-    id: "1",
-    name: "Siam Hasan",
-    username: "siamTy",
-    email: "siam@example.com",
-    profilePicture: "https://i.pravatar.cc/100?img=12",
-  },
-  {
-    id: "2",
-    name: "John Doe",
-    username: "john_d",
-    email: "john@example.com",
-    profilePicture: "https://i.pravatar.cc/100?img=32",
-  },
-];
-
 function AssignToDialog({ onAssign, onClose }: Props) {
   const [query, setQuery] = useState("");
-  const [users, setUsers] = useState<AssignUser[]>([]);
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [selectedUser, setSelectedUser] = useState<AssignUser | null>(null);
+  const [limit, setLimit] = useState(10);
+  const { data, refetch } = userGetVisibleUsersQuery({
+    searchTerm: query,
+    limit,
+  });
+
+  const users = data?.data ?? [];
 
   useEffect(() => {
-    if (!query) {
-      setUsers([]);
-      return;
-    }
-
-    // 🔁 Replace with API call later
-    const filtered = mockUsers.filter(
-      (user) =>
-        user.email.toLowerCase().includes(query.toLowerCase()) ||
-        user.username.toLowerCase().includes(query.toLowerCase()),
-    );
-
-    setUsers(filtered);
+    if (query) {
+      setLimit(100);
+    } else setLimit(10);
+    refetch();
   }, [query]);
 
   const close = () => {
@@ -57,13 +32,11 @@ function AssignToDialog({ onAssign, onClose }: Props) {
     onClose();
   };
   const handleAssign = () => {
-    if (!selectedUserId) return;
+    if (!selectedUser) return;
 
-    onAssign(selectedUserId);
+    onAssign(selectedUser);
     setQuery("");
-    setUsers([]);
-    setSelectedUserId(null);
-
+    setSelectedUser(null);
     close();
   };
 
@@ -97,15 +70,18 @@ function AssignToDialog({ onAssign, onClose }: Props) {
             {users.map((user) => (
               <div
                 key={user.id}
-                onClick={() => setSelectedUserId(user.id)}
+                onClick={() => setSelectedUser(user as AssignUser)}
                 className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer border
                 ${
-                  selectedUserId === user.id
+                  selectedUser?.id === user.id
                     ? "border-primary bg-primary/10"
                     : "border-base-200 hover:bg-base-200"
                 }`}
               >
-                <img src={user.profilePicture} className="w-10 h-10 rounded-full" />
+                <img
+                  src={user.profilePicture ?? DEFAULT_PROFILE_PHOTO}
+                  className="w-10 h-10 rounded-full"
+                />
                 <div className="flex-1">
                   <p className="font-medium">{user.name}</p>
                   <p className="text-sm opacity-70">
@@ -121,7 +97,7 @@ function AssignToDialog({ onAssign, onClose }: Props) {
             <button className="btn btn-ghost" onClick={close}>
               Cancel
             </button>
-            <button className="btn btn-primary" disabled={!selectedUserId} onClick={handleAssign}>
+            <button className="btn btn-primary" disabled={!selectedUser} onClick={handleAssign}>
               Assign
             </button>
           </div>

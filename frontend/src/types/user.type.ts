@@ -17,3 +17,11 @@ export enum Gender {
   Female = "Female",
   Other = "Other",
 }
+
+export type AssignUser = {
+  id: string;
+  name: string;
+  username: string;
+  email: string;
+  profilePicture: string;
+};

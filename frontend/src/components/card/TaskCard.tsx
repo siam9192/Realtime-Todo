@@ -1,42 +1,53 @@
-import { Pencil, Trash2, Clock } from "lucide-react";
-import { TaskStatus, type Task, type TaskUser } from "../../types/task.type";
+import { TaskStatus, type Task } from "../../types/task.type";
 import UpdateTaskModal from "../ui/UpdateTaskModal";
 
-function TaskCard({ task }: { task: Task }) {
-  const currentUser: TaskUser = {
-    id: "user-123",
-    name: "Siam Hasan",
-    username: "siamTy",
-    profilePicture: "https://i.pravatar.cc/150?img=12",
-  };
+import { useCurrentUserProviderContext } from "../../context/CurrentUserProviderContext";
+import { DEFAULT_PROFILE_PHOTO } from "../../utils/constant";
+import TaskDeleteButton from "../ui/TaskDeleteButton";
 
+function TaskCard({ task }: { task: Task }) {
+  const { data } = useCurrentUserProviderContext();
+
+  const currentUser = data?.data!;
   const isOverdue =
     new Date(task.dueDate || task.updatedAt) < new Date() && task.status !== TaskStatus.Completed;
 
-  const isOwner = task.creator.id === currentUser.id;
+  const isOwner = task.creatorId === currentUser.id;
+  const createdAt = new Date(task.createdAt);
+  const updatedAt = new Date(task.updatedAt);
+  const dueDate = new Date(task.dueDate);
 
   return (
-    <div className="relative p-5 bg-base-100 rounded-2xl border border-base-200 shadow-sm hover:shadow-md transition-all duration-200 group">
-      <div className="flex justify-between items-start gap-2">
-        <h3 className="text-lg font-semibold leading-tight">{task.title}</h3>
+    <div className="relative p-5 bg-base-100 rounded-2xl border border-base-200 shadow-sm hover:shadow-md transition-all duration-200 group h-full flex flex-col">
+      <div className="grow">
+        <div className="flex justify-between items-start gap-2">
+          <h3 className="text-lg font-semibold leading-tight">{task.title}</h3>
 
-        {isOverdue && <span className="text-warning gap-1">Overdue</span>}
+          {isOverdue && <span className="text-warning gap-1">Overdue</span>}
+        </div>
+
+        <p className="mt-2 text-sm opacity-70 line-clamp-2">{task.description}</p>
       </div>
-
-      <p className="mt-2 text-sm opacity-70 line-clamp-2">{task.description}</p>
 
       <div className="mt-4 flex justify-between items-center text-sm">
         {/* Assignee */}
-        <div className="flex items-center gap-2">
-          <img
-            src={task.assignedTo.profilePicture}
-            alt={task.assignedTo.name}
-            className="w-7 h-7 rounded-full ring-2 ring-base-200"
-          />
-          <span className="opacity-70">
-            {task.assignedTo.id === currentUser.id ? "You" : task.assignedTo.name}
-          </span>
-        </div>
+        {task.assignedTo ? (
+          <div>
+            <p className="text-xs opacity-60 mb-1">Assigned To:</p>
+            <div className="flex items-center gap-2">
+              <img
+                src={task.assignedTo.profilePicture ?? DEFAULT_PROFILE_PHOTO}
+                alt={task.assignedTo.name}
+                className="w-7 h-7 rounded-full ring-2 ring-base-200"
+              />
+              <span className="opacity-70">
+                {task.assignedTo.id === currentUser.id ? "You" : task.assignedTo.name}
+              </span>
+            </div>
+          </div>
+        ) : (
+          <div></div>
+        )}
 
         {/* Priority */}
         <span
@@ -53,26 +64,39 @@ function TaskCard({ task }: { task: Task }) {
       </div>
 
       {/* ---------- Footer ---------- */}
-      <div className="mt-3 flex justify-between items-center text-xs opacity-60">
+      <div className="mt-4 pt-3 border-t border-base-200 flex flex-col md:flex-row md:justify-between gap-2 text-xs text-base-content/60">
+        {/* Creator */}
         <span>
           Created by{" "}
-          <span className="font-medium">
-            {task.creator.id === currentUser.id ? "You" : task.creator.name}
+          <span className="font-medium text-base-content">
+            {task.creatorId === currentUser.id ? "You" : task.creator.name}
           </span>
         </span>
 
-        <span>Due: {new Date(task.updatedAt).toLocaleDateString()}</span>
+        {/* Dates */}
+        <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
+          <span>
+            <span className="font-medium">Created:</span> {createdAt.toLocaleDateString()} •{" "}
+            {createdAt.toLocaleTimeString()}
+          </span>
+
+          <span>
+            <span className="font-medium">Updated:</span> {updatedAt.toLocaleDateString()} •{" "}
+            {updatedAt.toLocaleTimeString()}
+          </span>
+
+          <span>
+            <span className="font-medium">Due:</span> {dueDate.toLocaleDateString()} •{" "}
+            {dueDate.toLocaleTimeString()}
+          </span>
+        </div>
       </div>
 
       {/* Actions  */}
       <div className="mt-2  right-3 flex justify-end gap-1 ">
-        <UpdateTaskModal task={task} onSubmit={() => {}} />
+        <UpdateTaskModal task={task} />
 
-        {isOwner && (
-          <button className="btn btn-xs btn-ghost text-error">
-            <Trash2 size={16} />
-          </button>
-        )}
+        {isOwner && <TaskDeleteButton id={task.id} />}
       </div>
     </div>
   );

@@ -2,17 +2,16 @@ import { userGetCurrentUserQuery } from "../../query/services/user.service";
 import type { CurrentUser } from "../../types/user.type";
 import { DEFAULT_PROFILE_PHOTO } from "../../utils/constant";
 
-
 function ProfileSection() {
-  const {data} =  userGetCurrentUserQuery()
-  const user = data?.data as CurrentUser
-  
+  const { data } = userGetCurrentUserQuery();
+  const user = data?.data as CurrentUser;
+
   return (
     <div className="bg-base-100 p-3 md:p-6 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-200">
       <div className="flex md:flex-row flex-col items-center gap-6">
         {/* Avatar */}
         <img
-          src={user.profilePicture??DEFAULT_PROFILE_PHOTO}
+          src={user.profilePicture ?? DEFAULT_PROFILE_PHOTO}
           alt="avatar"
           className="w-24 h-24 rounded-full object-cover border-2 border-primary"
         />
@@ -33,7 +32,7 @@ function ProfileSection() {
                 Active
               </span>
               <span className="px-3 py-1 rounded-full bg-secondary/10 text-secondary font-medium">
-                {user.gender||"Not Specified"}
+                {user.gender || "Not Specified"}
               </span>
             </div>
             <div>
