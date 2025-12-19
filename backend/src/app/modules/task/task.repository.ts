@@ -239,7 +239,7 @@ class TaskRepository {
       },
     });
 
-    console.log(data);
+  
     const totalResults = await this.task.count({
       where: where,
     });

@@ -4,9 +4,11 @@ import { Outlet } from "react-router-dom";
 import { Toaster } from "sonner";
 import CurrentUserProviderContext from "./context/CurrentUserProviderContext";
 
+
 export const queryClient = new QueryClient();
 
 function App() {
+  
   const [theme] = useState<string>(localStorage.getItem("theme") || "dark");
   useEffect(() => {
     const root = window.document.documentElement;

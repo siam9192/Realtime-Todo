@@ -3,6 +3,7 @@ import cors from 'cors';
 import routes from './lib/routes';
 import cookieParser from 'cookie-parser';
 import { GlobalErrorHandler } from './lib/globalErrorHandler';
+import envConfig from './config/env.config';
 const app = express();
 
 //Middlewares
@@ -10,7 +11,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: ['http://localhost:5173'],
+    origin: [envConfig.url.client_origin as string],
     credentials: true,
   }),
 );

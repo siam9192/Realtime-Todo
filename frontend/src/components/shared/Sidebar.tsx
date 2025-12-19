@@ -1,5 +1,5 @@
 import { Home, ListChecks, LogOut, User } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useUserLogoutMutation } from "../../query/services/auth.service";
 import { queryClient } from "../../App";
 
@@ -13,7 +13,7 @@ function Sidebar() {
   ];
 
   const {mutate} = useUserLogoutMutation()
-  const navigate = useNavigate()
+  
 
   const logout = ()=>{
     mutate(undefined,{

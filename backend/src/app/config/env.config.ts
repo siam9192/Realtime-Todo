@@ -7,7 +7,9 @@ const envConfig = {
   environment: process.env.ENVIRONMENT,
   url: {
     database: process.env.DATABASE_URL,
+    client_origin:process.env.CLIENT_ORIGIN
   },
+
 
   jwt: {
     access_token_secret: process.env.JWT_ACCESS_TOKEN_SECRET,

@@ -1,6 +1,7 @@
 import { createServer } from 'node:http';
 import app from './app';
 import { initSocket } from './socket';
+import envConfig from './config/env.config';
 
 async function main() {
   try {
