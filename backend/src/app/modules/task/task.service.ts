@@ -26,9 +26,7 @@ class TaskService {
       creatorId: authUser.id,
     });
 
-    return {
-      data: createdTask,
-    };
+    return { data: createdTask };
   }
 
   async updateTask(
@@ -82,9 +80,7 @@ class TaskService {
     // Response
     return {
       data: updatedTask,
-      ...(assignedChange.changed && {
-        assigned: assignedChange,
-      }),
+      ...(assignedChange.changed && { assigned: assignedChange }),
     };
   }
 
@@ -105,9 +101,7 @@ class TaskService {
     // Delete task
     const deletedTask = await taskRepository.deleteById(taskId);
 
-    return {
-      data: deletedTask,
-    };
+    return { data: deletedTask };
   }
 
   async getAssignedTasks(

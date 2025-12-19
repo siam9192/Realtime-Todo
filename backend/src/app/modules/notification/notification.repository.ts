@@ -10,50 +10,32 @@ class NotificationRepository {
   }
 
   async createMany(data: Prisma.NotificationUncheckedCreateInput[]) {
-    return await this.notification.createMany({
-      data,
-    });
+    return await this.notification.createMany({ data });
   }
 
   async findUserNotifications(userId: string, paginationData: PaginationData) {
     const { page, limit, skip, sortBy, sortOrder } = paginationData;
 
-    const whereConditions: Prisma.NotificationWhereInput = {
-      userId,
-    };
+    const whereConditions: Prisma.NotificationWhereInput = { userId };
 
     const notifications = await this.notification.findMany({
       where: whereConditions,
-      orderBy: {
-        [sortBy]: sortOrder,
-      },
+      orderBy: { [sortBy]: sortOrder },
       take: limit,
       skip,
     });
 
     const totalResults = await this.notification.count();
 
-    const meta = {
-      page,
-      limit,
-      totalResults,
-    };
+    const meta = { page, limit, totalResults };
 
-    return {
-      data: notifications,
-      meta,
-    };
+    return { data: notifications, meta };
   }
 
   async updateUserNotificationsAsRead(userId: string) {
     return await this.notification.updateMany({
-      where: {
-        userId,
-        isRead: false,
-      },
-      data: {
-        isRead: true,
-      },
+      where: { userId, isRead: false },
+      data: { isRead: true },
     });
   }
 }

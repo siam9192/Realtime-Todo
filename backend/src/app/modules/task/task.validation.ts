@@ -23,9 +23,6 @@ const createTaskSchema = z.object({
 
 const updateTaskSchema = createTaskSchema.partial();
 
-const taskValidations = {
-  createTaskSchema,
-  updateTaskSchema,
-};
+const taskValidations = { createTaskSchema, updateTaskSchema };
 
 export default taskValidations;

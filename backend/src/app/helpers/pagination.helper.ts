@@ -48,13 +48,7 @@ export const calculatePagination = (
 
   const skip = (page - 1) * limit;
 
-  return {
-    page,
-    limit,
-    skip,
-    sortOrder,
-    sortBy,
-  };
+  return { page, limit, skip, sortOrder, sortBy };
 };
 
 // Strongly typed pick for pagination

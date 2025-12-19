@@ -9,11 +9,7 @@ export function getAssignedUserChange(
 ) {
   const changed = previous !== next;
 
-  return {
-    changed,
-    from: previous ?? null,
-    to: next ?? null,
-  };
+  return { changed, from: previous ?? null, to: next ?? null };
 }
 
 export function notifyUser(

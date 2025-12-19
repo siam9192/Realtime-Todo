@@ -8,11 +8,7 @@ import { AuthUser } from '../types';
 
 export const initSocket = (httpServer: HttpServer) => {
   const io = new Server(httpServer, {
-    cors: {
-      origin: '*',
-      methods: ['GET', 'POST'],
-      credentials: true,
-    },
+    cors: { origin: '*', methods: ['GET', 'POST'], credentials: true },
   });
 
   io.use(socketAuth());

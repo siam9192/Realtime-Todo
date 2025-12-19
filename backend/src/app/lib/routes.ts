@@ -8,26 +8,11 @@ import metadataRouter from '../modules/metadata/metadata.router';
 type TModuleRoutes = { path: string; router: IRouter }[];
 const router = Router();
 const moduleRoutes: TModuleRoutes = [
-  {
-    path: '/auth',
-    router: authRouter,
-  },
-  {
-    path: '/users',
-    router: userRouter,
-  },
-  {
-    path: '/tasks',
-    router: taskRouter,
-  },
-  {
-    path: '/notifications',
-    router: notificationRouter,
-  },
-  {
-    path: '/metadata',
-    router: metadataRouter,
-  },
+  { path: '/auth', router: authRouter },
+  { path: '/users', router: userRouter },
+  { path: '/tasks', router: taskRouter },
+  { path: '/notifications', router: notificationRouter },
+  { path: '/metadata', router: metadataRouter },
 ];
 
 const routes = moduleRoutes.map((route) =>

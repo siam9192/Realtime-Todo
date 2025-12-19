@@ -3,15 +3,11 @@ import { prisma } from '../../prisma';
 
 class MetadataRepository {
   async countUserAssignedTasks(userId: string) {
-    return prisma.task.count({
-      where: { assignedToId: userId },
-    });
+    return prisma.task.count({ where: { assignedToId: userId } });
   }
 
   async countUserCreatedTasks(userId: string) {
-    return prisma.task.count({
-      where: { creatorId: userId },
-    });
+    return prisma.task.count({ where: { creatorId: userId } });
   }
 
   async countUserOverdueTasks(userId: string) {
@@ -30,16 +26,12 @@ class MetadataRepository {
   }
 
   async countUserUnreadNotifications(userId: string) {
-    return prisma.notification.count({
-      where: { userId, isRead: false },
-    });
+    return prisma.notification.count({ where: { userId, isRead: false } });
   }
 
   // Count total notifications for a user
   async countUserNotifications(userId: string) {
-    return prisma.notification.count({
-      where: { userId },
-    });
+    return prisma.notification.count({ where: { userId } });
   }
 }
 

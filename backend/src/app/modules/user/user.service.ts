@@ -29,10 +29,7 @@ class UserService {
 
     // Insert user
     const createdUser = await userRepository.create(
-      {
-        ...payload,
-        password: bcryptHelper.hash(payload.password),
-      },
+      { ...payload, password: bcryptHelper.hash(payload.password) },
       {
         select: {
           id: true,

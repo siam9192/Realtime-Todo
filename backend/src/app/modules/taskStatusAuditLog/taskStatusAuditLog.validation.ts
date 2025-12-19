@@ -13,8 +13,6 @@ export const createTaskStatusLogSchema = z
     path: ['newStatus'], // error will point here
   });
 
-const taskStatusAuditLogValidations = {
-  createTaskStatusLogSchema,
-};
+const taskStatusAuditLogValidations = { createTaskStatusLogSchema };
 
 export default taskStatusAuditLogValidations;

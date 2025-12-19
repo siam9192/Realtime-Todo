@@ -37,9 +37,6 @@ export const updateUserProfileSchema = z.object({
   gender: z.nativeEnum(Gender).nullable().optional(),
 });
 
-const userValidations = {
-  createUserSchema,
-  updateUserProfileSchema,
-};
+const userValidations = { createUserSchema, updateUserProfileSchema };
 
 export default userValidations;

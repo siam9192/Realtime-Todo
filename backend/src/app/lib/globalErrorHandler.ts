@@ -12,11 +12,7 @@ export const handleZodValidationError = (err: ZodError): ErrorInterface => {
     message: issue.message,
   }));
 
-  return {
-    statusCode,
-    message: err.message,
-    errorMessages,
-  };
+  return { statusCode, message: err.message, errorMessages };
 };
 
 export function GlobalErrorHandler(
@@ -29,10 +25,7 @@ export function GlobalErrorHandler(
   let statusCode = 500;
   let message = 'Something went wrong!';
   let errorMessages: ErrorSource[] = [
-    {
-      path: '',
-      message: 'Something went wrong',
-    },
+    { path: '', message: 'Something went wrong' },
   ];
 
   if (err instanceof AppError) {

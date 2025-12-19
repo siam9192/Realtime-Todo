@@ -30,10 +30,7 @@ class AuthService {
       where: {
         ...(isEmailProvided ? { email: identifier } : { username: identifier }),
       },
-      select: {
-        id: true,
-        password: true,
-      },
+      select: { id: true, password: true },
     });
 
     // Compare password
@@ -44,9 +41,7 @@ class AuthService {
       throw new AppError(httpStatus.FORBIDDEN, 'Invalid email or password');
     }
 
-    const tokenPayload = {
-      id: user.id,
-    };
+    const tokenPayload = { id: user.id };
 
     // Generate access token
     const accessToken = jwtHelper.generateToken(
@@ -61,18 +56,11 @@ class AuthService {
       envConfig.jwt.refresh_token_expire as string,
     );
 
-    return {
-      accessToken,
-      refreshToken,
-    };
+    return { accessToken, refreshToken };
   }
 
   async changePassword(authUser: AuthUser, payload: ChangePasswordPayload) {
-    const user = await prisma.user.findUnique({
-      where: {
-        id: authUser.id,
-      },
-    });
+    const user = await prisma.user.findUnique({ where: { id: authUser.id } });
 
     if (!user) throw new Error();
     // Compare old password
@@ -96,9 +84,7 @@ class AuthService {
       passwordLastChangedAt: new Date(),
     });
 
-    const tokenPayload = {
-      id: user.id,
-    };
+    const tokenPayload = { id: user.id };
 
     // Generate access token
     const accessToken = jwtHelper.generateToken(
@@ -113,10 +99,7 @@ class AuthService {
       envConfig.jwt.refresh_token_expire as string,
     );
 
-    return {
-      accessToken,
-      refreshToken,
-    };
+    return { accessToken, refreshToken };
   }
 
   async getNewAccessToken(oldRefreshToken: string) {
@@ -142,9 +125,7 @@ class AuthService {
       } catch (error) {
         throw new AppError(httpStatus.UNAUTHORIZED, 'Invalid refresh token.');
       }
-      const tokenPayload = {
-        id: decoded.id,
-      };
+      const tokenPayload = { id: decoded.id };
 
       // Generate access token
       const accessToken = jwtHelper.generateToken(
@@ -159,10 +140,7 @@ class AuthService {
         envConfig.jwt.refresh_token_expire as string,
       );
 
-      return {
-        accessToken,
-        refreshToken,
-      };
+      return { accessToken, refreshToken };
     } catch (error) {
       throw new AppError(
         httpStatus.BAD_REQUEST,

@@ -12,11 +12,7 @@ class MetadataService {
         this.repo.countUserOverdueTasks(authUser.id),
       ]);
 
-    return {
-      totalCreatedTasks,
-      totalAssignedTasks,
-      totalOverdueTasks,
-    };
+    return { totalCreatedTasks, totalAssignedTasks, totalOverdueTasks };
   }
 
   async getUserNotificationsMetadata(authUser: AuthUser) {
@@ -25,10 +21,7 @@ class MetadataService {
       this.repo.countUserNotifications(authUser.id),
     ]);
 
-    return {
-      totalUnread: unreadCount,
-      total: totalNotifications,
-    };
+    return { totalUnread: unreadCount, total: totalNotifications };
   }
 }
 

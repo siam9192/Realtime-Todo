@@ -34,6 +34,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev --respawn --transpile-only ./src/app/server.ts",
     "prettier": "prettier --ignore-path .gitignore --write \"./src/app/**/*.+(ts|json)\"",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "jtest": "jest --verbose",
+    "jtest:watch": "jest --watch",
+    "jtest:coverage": "jest --coverage"
   }
 }

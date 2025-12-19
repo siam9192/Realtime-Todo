@@ -27,14 +27,7 @@ class UserRepository {
     // Search
     if (searchTerm) {
       andConditions.push({
-        OR: [
-          {
-            email: String(searchTerm),
-          },
-          {
-            username: String(searchTerm),
-          },
-        ],
+        OR: [{ email: String(searchTerm) }, { username: String(searchTerm) }],
       });
     }
 
@@ -49,9 +42,7 @@ class UserRepository {
       andConditions.push(validOtherFilters);
     }
 
-    return {
-      ...(andConditions.length ? { AND: andConditions } : {}),
-    };
+    return { ...(andConditions.length ? { AND: andConditions } : {}) };
   }
 
   async create(
@@ -70,29 +61,17 @@ class UserRepository {
   }
 
   async isExistById(id: string) {
-    const user = await this.user.findUnique({
-      where: {
-        id,
-      },
-      select: null,
-    });
+    const user = await this.user.findUnique({ where: { id }, select: null });
     return !!user;
   }
   async isExistByEmail(email: string) {
-    const user = await this.user.findUnique({
-      where: {
-        email,
-      },
-      select: null,
-    });
+    const user = await this.user.findUnique({ where: { email }, select: null });
     return !!user;
   }
 
   async isExistByUsername(username: string) {
     const user = await this.user.findUnique({
-      where: {
-        username,
-      },
+      where: { username },
       select: null,
     });
     return !!user;
@@ -102,10 +81,7 @@ class UserRepository {
     id: string,
     options: { include?: Prisma.UserInclude; select?: Prisma.UserSelect } = {},
   ) {
-    return this.user.findUnique({
-      where: { id },
-      ...options,
-    });
+    return this.user.findUnique({ where: { id }, ...options });
   }
 
   async findVisibleUsers(
@@ -116,17 +92,13 @@ class UserRepository {
     const { page, limit, skip, sortBy, sortOrder } = paginationData;
 
     const whereConditions: Prisma.UserWhereInput = {
-      id: {
-        not: currentUserId,
-      },
+      id: { not: currentUserId },
       ...this.buildUsersWhere(filterQuery),
     };
 
     const users = await this.user.findMany({
       where: whereConditions,
-      orderBy: {
-        [sortBy]: sortOrder,
-      },
+      orderBy: { [sortBy]: sortOrder },
       take: limit,
       skip,
       select: this.userDefaultSelect,
@@ -134,16 +106,9 @@ class UserRepository {
 
     const totalResults = await this.user.count();
 
-    const meta = {
-      page,
-      limit,
-      totalResults,
-    };
+    const meta = { page, limit, totalResults };
 
-    return {
-      data: users,
-      meta,
-    };
+    return { data: users, meta };
   }
 }
 

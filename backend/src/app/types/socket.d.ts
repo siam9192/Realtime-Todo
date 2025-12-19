@@ -3,8 +3,6 @@ import { AuthUser } from '.';
 
 declare module 'socket.io' {
   interface Socket {
-    data: {
-      user: AuthUser;
-    };
+    data: { user: AuthUser };
   }
 }

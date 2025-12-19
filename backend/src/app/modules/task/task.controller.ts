@@ -42,22 +42,6 @@ class TaskController {
     });
   });
 
-  /* How update task work 
-1  Request
-   ↓
-2  updateTask service
-   ↓
-3  prepare notify helper
-   ↓
-4  assignment changed?
-   ↓
-5  UNASSIGN (from) → notify +  emit
-   ↓
-6  ASSIGN (to) → notify + emit
-   ↓
-7  emit task:updated
-   ↓
-8  HTTP response */
   updateTask = catchAsync(async (req, res) => {
     const { user: authUser, body, params } = req;
 
@@ -69,7 +53,7 @@ class TaskController {
 
     const taskMeta = { id: data.id, title: data.title };
 
-    // 1️⃣ Handle assignment changes
+    //  Handle assignment changes
     if (assigned?.from) {
       notifyUser(
         assigned.from,
@@ -94,7 +78,7 @@ class TaskController {
       emitTaskEvent(assigned.to, TaskEvent.ASSIGNED, data.id);
     }
 
-    // 2️⃣ Emit task updated
+    //  Emit task updated
     const recipients = new Set<string>();
 
     recipients.add(data.creatorId);
@@ -105,7 +89,7 @@ class TaskController {
 
     emitToUsers([...recipients], TaskEvent.UPDATED, { id: data.id });
 
-    // 3️⃣ Response
+    //  Response
     sendSuccessResponse(res, {
       message: 'Task updated successfully',
       statusCode: httpStatus.OK,
@@ -119,9 +103,7 @@ class TaskController {
     emitToUsers(
       [data.creatorId, data.assignedToId].filter((_) => _ !== null),
       TaskEvent.DELETED,
-      {
-        id: data.id,
-      },
+      { id: data.id },
     );
 
     sendSuccessResponse(res, {

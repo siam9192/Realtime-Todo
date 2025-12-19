@@ -20,14 +20,16 @@ class AuthController {
     res.cookie('accessToken', result.accessToken, {
       httpOnly: true,
       secure: envConfig.environment?.toLocaleLowerCase() === 'production',
-     sameSite: envConfig.environment?.toLowerCase() === 'production' ? 'none' : 'lax', 
+      sameSite:
+        envConfig.environment?.toLowerCase() === 'production' ? 'none' : 'lax',
       maxAge: parse(envConfig.jwt.access_token_expire as string) as number,
     });
 
     res.cookie('refreshToken', result.refreshToken, {
       httpOnly: true,
       secure: envConfig.environment?.toLocaleLowerCase() === 'production',
-      sameSite: envConfig.environment?.toLowerCase() === 'production' ? 'none' : 'lax', 
+      sameSite:
+        envConfig.environment?.toLowerCase() === 'production' ? 'none' : 'lax',
       maxAge: parse(envConfig.jwt.refresh_token_expire as string) as number,
     });
 
@@ -42,13 +44,15 @@ class AuthController {
     res.clearCookie('accessToken', {
       httpOnly: true,
       secure: envConfig.environment?.toLowerCase() === 'production',
-  sameSite: envConfig.environment?.toLowerCase() === 'production' ? 'none' : 'lax',
+      sameSite:
+        envConfig.environment?.toLowerCase() === 'production' ? 'none' : 'lax',
     });
 
     res.clearCookie('refreshToken', {
       httpOnly: true,
       secure: envConfig.environment?.toLowerCase() === 'production',
-  sameSite: envConfig.environment?.toLowerCase() === 'production' ? 'none' : 'lax',
+      sameSite:
+        envConfig.environment?.toLowerCase() === 'production' ? 'none' : 'lax',
     });
 
     sendSuccessResponse(res, {
@@ -63,14 +67,16 @@ class AuthController {
     res.cookie('accessToken', result.accessToken, {
       httpOnly: true,
       secure: envConfig.environment?.toLocaleLowerCase() === 'production',
-    sameSite: envConfig.environment?.toLowerCase() === 'production' ? 'none' : 'lax', 
+      sameSite:
+        envConfig.environment?.toLowerCase() === 'production' ? 'none' : 'lax',
       maxAge: parse(envConfig.jwt.access_token_expire as string) as number,
     });
 
     res.cookie('refreshToken', result.refreshToken, {
       httpOnly: true,
       secure: envConfig.environment?.toLocaleLowerCase() === 'production',
-     sameSite: envConfig.environment?.toLowerCase() === 'production' ? 'none' : 'lax', 
+      sameSite:
+        envConfig.environment?.toLowerCase() === 'production' ? 'none' : 'lax',
       maxAge: parse(envConfig.jwt.refresh_token_expire as string) as number,
     });
 

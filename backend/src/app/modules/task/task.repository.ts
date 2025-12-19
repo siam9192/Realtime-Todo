@@ -4,9 +4,7 @@ import { FilterQuery, PaginationData } from '../../types';
 import { TaskFilterQuery } from './task.interface';
 
 export type TaskWithInclude<T extends Prisma.TaskInclude> =
-  Prisma.TaskGetPayload<{
-    include: T;
-  }>;
+  Prisma.TaskGetPayload<{ include: T }>;
 
 class TaskRepository {
   private buildTasksAndConditions(
@@ -19,10 +17,7 @@ class TaskRepository {
     // Search
     if (searchTerm) {
       andConditions.push({
-        title: {
-          contains: String(searchTerm),
-          mode: 'insensitive',
-        },
+        title: { contains: String(searchTerm), mode: 'insensitive' },
       });
     }
 
@@ -43,12 +38,7 @@ class TaskRepository {
   private task = prisma.task;
 
   async isTaskExist(id: string) {
-    const user = await this.task.findUnique({
-      where: {
-        id,
-      },
-      select: null,
-    });
+    const user = await this.task.findUnique({ where: { id }, select: null });
     return !!user;
   }
 
@@ -60,34 +50,22 @@ class TaskRepository {
     taskId: string,
     options: { include?: Prisma.UserInclude; select?: Prisma.UserSelect } = {},
   ) {
-    return prisma.task.findUnique({
-      where: { id: taskId },
-      ...options,
-    });
+    return prisma.task.findUnique({ where: { id: taskId }, ...options });
   }
 
   async findByIdWithOwnership(taskId: string) {
     return prisma.task.findUnique({
       where: { id: taskId },
-      select: {
-        id: true,
-        creatorId: true,
-        assignedToId: true,
-      },
+      select: { id: true, creatorId: true, assignedToId: true },
     });
   }
 
   async updateById(taskId: string, data: Prisma.TaskUncheckedUpdateInput) {
-    return await this.task.update({
-      where: { id: taskId },
-      data,
-    });
+    return await this.task.update({ where: { id: taskId }, data });
   }
 
   async deleteById(taskId: string) {
-    return await this.task.delete({
-      where: { id: taskId },
-    });
+    return await this.task.delete({ where: { id: taskId } });
   }
 
   async findAssignedTasks(
@@ -107,9 +85,7 @@ class TaskRepository {
       where,
       take: limit,
       skip,
-      orderBy: {
-        [sortBy]: sortOrder,
-      },
+      orderBy: { [sortBy]: sortOrder },
       include: {
         creator: {
           select: {
@@ -123,19 +99,10 @@ class TaskRepository {
       },
     });
 
-    const totalResults = await prisma.task.count({
-      where: where,
-    });
+    const totalResults = await prisma.task.count({ where: where });
 
-    const meta = {
-      page,
-      limit,
-      totalResults,
-    };
-    return {
-      data,
-      meta,
-    };
+    const meta = { page, limit, totalResults };
+    return { data, meta };
   }
 
   async findCreatedTasks(
@@ -145,18 +112,13 @@ class TaskRepository {
   ) {
     const { page, limit, skip, sortBy, sortOrder } = PaginationData;
     const where = {
-      AND: this.buildTasksAndConditions({
-        ...filterQuery,
-        creatorId: userId,
-      }),
+      AND: this.buildTasksAndConditions({ ...filterQuery, creatorId: userId }),
     };
     const data = await this.task.findMany({
       where,
       take: limit,
       skip,
-      orderBy: {
-        [sortBy]: sortOrder,
-      },
+      orderBy: { [sortBy]: sortOrder },
       include: {
         assignedTo: {
           select: {
@@ -169,19 +131,10 @@ class TaskRepository {
         },
       },
     });
-    const totalResults = await prisma.task.count({
-      where: where,
-    });
+    const totalResults = await prisma.task.count({ where: where });
 
-    const meta = {
-      page,
-      limit,
-      totalResults,
-    };
-    return {
-      data,
-      meta,
-    };
+    const meta = { page, limit, totalResults };
+    return { data, meta };
   }
 
   async findOverdueTasks(
@@ -192,25 +145,12 @@ class TaskRepository {
     const { page, skip, limit } = paginationData;
 
     const where: Prisma.TaskWhereInput = {
-      AND: this.buildTasksAndConditions({
-        ...filterQuery,
-      }),
+      AND: this.buildTasksAndConditions({ ...filterQuery }),
 
-      OR: [
-        {
-          creatorId: userId,
-        },
-        {
-          assignedToId: userId,
-        },
-      ],
-      dueDate: {
-        lt: new Date(),
-      },
+      OR: [{ creatorId: userId }, { assignedToId: userId }],
+      dueDate: { lt: new Date() },
 
-      status: {
-        not: TaskStatus.Completed,
-      },
+      status: { not: TaskStatus.Completed },
     };
 
     const data = await this.task.findMany({
@@ -239,27 +179,15 @@ class TaskRepository {
       },
     });
 
-  
-    const totalResults = await this.task.count({
-      where: where,
-    });
+    const totalResults = await this.task.count({ where: where });
 
-    const meta = {
-      page,
-      limit,
-      totalResults,
-    };
-    return {
-      data,
-      meta,
-    };
+    const meta = { page, limit, totalResults };
+    return { data, meta };
   }
 
   async countTasksWithFilter(filter: FilterQuery) {
     return await this.task.count({
-      where: {
-        AND: this.buildTasksAndConditions(filter),
-      },
+      where: { AND: this.buildTasksAndConditions(filter) },
     });
   }
 

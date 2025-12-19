@@ -8,9 +8,6 @@ function compare(data: string, encrypted: string) {
   return bcrypt.compare(data, encrypted);
 }
 
-const bcryptHelper = {
-  hash,
-  compare,
-};
+const bcryptHelper = { hash, compare };
 
 export default bcryptHelper;

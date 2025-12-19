@@ -8,10 +8,7 @@ type TResponseData = {
   meta?: TMeta;
 };
 
-type TErrorResponse = {
-  statusCode: number;
-  message: string;
-};
+type TErrorResponse = { statusCode: number; message: string };
 
 export type TMeta = {
   page: number;
