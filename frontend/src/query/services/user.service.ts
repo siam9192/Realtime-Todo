@@ -10,7 +10,7 @@ import useFetch from "../client/useFetch";
 import useMutate from "../client/useMutation";
 
 export function userGetCurrentUserQuery() {
-  return useFetch<CurrentUser>(["getCurrentUser"], () => getCurrentUser(),{retry:false});
+  return useFetch<CurrentUser>(["getCurrentUser"], () => getCurrentUser(),{retry:false,refetchOnWindowFocus:false});
 }
 
 export function userGetVisibleUsersQuery(params: Params) {
