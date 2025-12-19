@@ -7,6 +7,10 @@
 - [API Contract](#api-contract)
 - [Architecture Overview & Design Decisions](#architecture-overview--design-decisions)
 - [Socket.IO Integration](#socketio-integration)
+- [Bonus Challenges](#bonus-challenges)
+- [Extra Features Implemented](#extra-features-implemented)
+- [Trade-offs & Assumptions](#trade-offs--assumptions)
+
 - [Trade-offs & Assumptions](#trade-offs--assumptions)
 
 ---
@@ -22,15 +26,13 @@ Create a .env file in the root folder:
 
 ```bash
 # Update the .env file with your own values:
-PORT=5000
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=myuser
-DB_PASS=mypassword
-DB_NAME=mydatabase
-JWT_SECRET=myverysecretkey
-JWT_EXPIRES_IN=7d
-NODE_ENV=development
+ENVIRONMENT="Development" # or "Production"
+DATABASE_URL=your_postgres_db_url
+JWT_ACCESS_TOKEN_SECRET=your_access_token_secret
+JWT_REFRESH_TOKEN_SECRET=your_refresh_token_secret
+JWT_ACCESS_TOKEN_EXPIRE=2d
+JWT_REFRESH_TOKEN_EXPIRE=30d
+CLIENT_ORIGIN=http://localhost:5173
 ```
 ```bash
 # Clone the repository
@@ -60,57 +62,54 @@ Create a .env file in the root folder:
 
 
 ```bash
-# Update the .env file with your own values:
+# Update the .env file with your own values
 
-ENVIRONMENT = "Development" OR "Production"
+VITE_ENVIRONMENT="Development" # or "Production"
 
+VITE_BACKEND_BASE_URL_DEV="http://localhost:5000/api"
+VITE_BACKEND_BASE_URL_PROD="https://your-deployed-backend-url.com/api" (optional for development mode)
 
-DATABASE_URL = postgress db url
+CLIENT_ORIGIN="http://localhost:5173" # replace with your frontend URL
 
-
-
-
-JWT_ACCESS_TOKEN_SECRET = 
-JWT_REFRESH_TOKEN_SECRET= 
-
-JWT_ACCESS_TOKEN_EXPIRE =  example 2d|2h
-JWT_REFRESH_TOKEN_EXPIRE = example 30d|2d|2h|2m
-
-
-CLIENT_ORIGIN = //client url
 ```
-### API Contract
+## API Contract
 
 This document describes the API endpoints for the project.
 
-| Method | Endpoint                  | Description        |
-|--------|---------------------------|------------------|
-| POST   | `/api/auth/login`      | Login user        |
-| POST   | `/api/auth/register`   | Register new user |
-| GET   | `/api/auth/accesstoken`   | Get new accesstoken using refreshtoken |
-| GET    | `/api/tasks/created`           | Get all tasks     |
-| GET    | `/api/tasks/assiigned`           | Get all tasks     |
-| GET   | `/api/tasks/oveedue`           | Create new task   |
-| POST  | `/api/tasks`       | Ceate task       |
-| PUT | `/api/tasks/:id`       | Update task       |
-| DELETE | `/api/v1/tasks/:id`       | Delete task       |
+| Method | Endpoint                       | Description                              |
+| ------ | ------------------------------ | ---------------------------------------- |
+| POST   | `/api/auth/login`              | Login user                               |
+| POST   | `/api/auth/register`           | Register new user                        |
+| GET    | `/api/auth/accesstoken`        | Get new access token using refresh token |
+| GET    | `/api/users/me`                | Get current logged-in user               |
+| PUT    | `/api/users/me`                | Update current user profile              |
+| GET    | `/api/tasks/created`           | Get all tasks created by the user        |
+| GET    | `/api/tasks/assigned`          | Get all tasks assigned to the user       |
+| GET    | `/api/tasks/overdue`           | Get all overdue tasks                    |
+| POST   | `/api/tasks`                   | Create a new task                        |
+| PUT    | `/api/tasks/:id`               | Update task                              |
+| DELETE | `/api/tasks/:id`               | Delete task                              |
+| GET    | `/api/notifications`           | Get current user notifications           |
+| PATCH  | `/api/notifications/mark-read` | Mark all unread notifications as read    |
 
-### Architecture Overview & Design Decisions
+## Architecture Overview & Design Decisions
 
 #### Backend
 
 - **Node.js + Express**: Provides REST API endpoints for the application.
 - **Prisma ORM with PostgreSQL**: I choose PostgreSQL as database because prisma is Highly Recommended in this assesment and at present i feal comfortable with prostgresql in prisma.
-- **Service Layer**: Contains business logic, keeping controllers thin and maintainable,respository for database crud.
+- **Service Layer**: Contains business logic, keeping controllers thin and maintainable,respository for database CRUD operations.
 - **JWT Authentication**: Uses access and refresh tokens with every request  for secure user authentication 
+
 
 #### Frontend
 
-- **React + Vite**: Lightweight and fast frontend setup.
-- **React Query**: Manages server state and data fetching efficiently.
-- **Socket.IO Client**: Enables real-time updates for tasks and notifications.
+- **React + Vite + Tailwind + DaisyUI**: Lightweight and fast frontend setup with modern styling.  
+- **React Query**: Efficiently manages server state, caching, and data fetching.  
+- **Socket.IO Client**: Enables real-time updates for tasks and notifications, keeping the UI in sync without manual refresh.
 
-### How Socket.IO Works
+
+## How Socket.IO Works
 
 Socket.IO is used in this project to provide **real-time updates** for tasks and notifications. The workflow is designed to ensure that only authenticated users receive relevant updates and that connections are properly managed. Here's how it works step by step:
 
@@ -131,7 +130,7 @@ Socket.IO is used in this project to provide **real-time updates** for tasks and
    - Efficiently manages multiple user connections in a centralized store.  
    - Provides instant updates to the frontend, improving user experience for task management and notifications.
      
-### Bonus Challenges
+## Bonus Challenges
 - **Task Status Update Logs:**  
   Every time a user updates a task, the change is saved as a log in the database. This allows tracking of task history and changes over time.  
   **Note:** Currently, there is no API endpoint to fetch these logs, so they are stored for internal tracking or future use.
@@ -143,7 +142,4 @@ Socket.IO is used in this project to provide **real-time updates** for tasks and
 
 ### Trade-offs & Assumption
 - Currently, user socket connections are stored in an in-memory variable. This works well for small-scale applications, but for larger-scale apps, this approach may consume a lot of memory. To handle a large number of concurrent connections efficiently, a proper caching mechanism (like Redis) would be recommended.
-
-
-
 
