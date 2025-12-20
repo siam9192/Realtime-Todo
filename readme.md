@@ -41,8 +41,8 @@ If you prefer not to create a new account, you can use the following demo creden
 | Authentication    | JWT (Access & Refresh Tokens) |
 | Validation        | Zod |
 | Testing           | Jest |
-| DevOps / Deployment | Railway |
-| Tools             | Git, GitHub, Prettier |
+| Deployment | Railway |
+
 
 ---
 
